@@ -1,0 +1,24 @@
+{
+  "name": "sentineliq-root",
+  "version": "1.0.0",
+  "description": "SentinelIQ - Threat Intelligence Correlation & Alert Prioritisation Assistant",
+  "private": true,
+  "workspaces": [
+    "server",
+    "client"
+  ],
+  "scripts": {
+    "server": "npm run dev --prefix server",
+    "client": "npm run dev --prefix client",
+    "test": "npm test --prefix server"
+  },
+  "keywords": [
+    "soc",
+    "threat-intel",
+    "mitre-attack",
+    "triage",
+    "bluf"
+  ],
+  "author": "SentinelIQ Engineering Team",
+  "license": "UNLICENSED"
+}

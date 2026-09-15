@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: sentineliq-mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: sentineliq
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - sentineliq-net
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: sentineliq-server
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      PORT: 5000
+      NODE_ENV: production
+      MONGO_URI: mongodb://mongodb:27017/sentineliq
+      JWT_SECRET: dev_secret_sentineliq_soc_2026
+      AIR_GAPPED_MODE: "true"
+    depends_on:
+      - mongodb
+    networks:
+      - sentineliq-net
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: sentineliq-client
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      - server
+    networks:
+      - sentineliq-net
+
+networks:
+  sentineliq-net:
+    driver: bridge
+
+volumes:
+  mongo_data:
